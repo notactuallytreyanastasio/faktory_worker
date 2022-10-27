@@ -88,8 +88,11 @@ defmodule FaktoryWorker do
   - `timeout` how long to wait for a response, in ms (default: #{@default_timeout})
 
   """
+
+  # this seems to be our producer in general
   @spec send_command(command(), [send_command_opt()]) :: FaktoryWorker.Connection.response()
   def send_command(command, opts \\ []) do
+    # IO.puts("faktory_worker.ex: COMMAND SENT #{inspect(command)}\n")
     opts
     |> Keyword.get(:faktory_name, __MODULE__)
     |> Pool.format_pool_name()

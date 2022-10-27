@@ -1,4 +1,7 @@
 defmodule FaktoryWorker.Connection do
+
+  # maybe we want the connection to be the consumer from demands sent from the worker
+  # it utilizes the connection manager and then proceeds to send things off
   @moduledoc false
 
   alias FaktoryWorker.Socket.{Tcp, Ssl}

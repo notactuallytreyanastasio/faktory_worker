@@ -40,6 +40,8 @@ defmodule FaktoryWorker.ConnectionManager.Server do
 
   @impl true
   def handle_call({:send_command, command}, _, state) do
+    # this is the entrypoint where we need to create demand to send as a producer
+    # where the connection manager is the producer
     {result, state} = ConnectionManager.send_command(state, command)
     {:reply, result, state}
   end

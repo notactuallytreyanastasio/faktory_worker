@@ -1,6 +1,7 @@
 defmodule FaktoryWorker.WorkerSupervisor do
   @moduledoc false
 
+  # our supervisor that if we wanted to manage things we would enter here
   use Supervisor
 
   alias FaktoryWorker.Random
@@ -15,6 +16,7 @@ defmodule FaktoryWorker.WorkerSupervisor do
   def init(opts) do
     opts = Keyword.put(opts, :process_wid, Random.process_wid())
 
+    # we probably start the producer/consumer here now
     children = [
       {FaktoryWorker.Worker.Pool, opts},
       {FaktoryWorker.Worker.HeartbeatServer, opts}
