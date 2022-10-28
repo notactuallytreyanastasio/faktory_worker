@@ -22,6 +22,7 @@ defmodule FaktoryWorker.ConnectionManager do
       conn: open_connection(opts),
       opts: opts
     }
+    # |> IO.inspect
   end
 
   @spec send_command(
@@ -43,6 +44,7 @@ defmodule FaktoryWorker.ConnectionManager do
 
       # Handle errors from Faktory that should not be tried again
       {{:error, "Halt: " <> reason = error}, state} ->
+        IO.inspect(reason, label: "EGGS2")
         log_error(error, command)
 
         {{:ok, reason}, state}
@@ -80,7 +82,9 @@ defmodule FaktoryWorker.ConnectionManager do
     IO.puts("I AM OPENING CONNECTION")
     case Connection.open(opts) do
       {:ok, connection} -> connection
-      {:error, _reason} -> nil
+      {:error, reason} ->
+        IO.inspect(reason, label: "EGGS")
+        nil
     end
   end
 

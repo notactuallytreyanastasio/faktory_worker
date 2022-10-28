@@ -90,7 +90,7 @@ defmodule Experiment do
     {:ok, pid} = Task.Supervisor.start_link()
     Enum.each(1..100, fn _n ->
       Task.Supervisor.async(pid, fn ->
-        MyWorker.perform_async([])
+        # MyWorker.perform_async([])
         FaktoryWorker.send_command({:fetch, []})
       end)
     end)

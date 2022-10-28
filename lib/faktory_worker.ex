@@ -86,7 +86,11 @@ defmodule FaktoryWorker do
     |> Keyword.get(:faktory_name, __MODULE__)
     |> Pool.format_pool_name()
     |> :poolboy.transaction(
-      &ConnectionManager.Server.send_command(&1, command),
+      fn n ->
+        IO.inspect(command, label: "POOLBOY TRANSACTION COMMAND")
+        IO.inspect(inspect(n), label: "POOLBOY TRANSACTION PID")
+        ConnectionManager.Server.send_command(n, command)
+      end,
       Keyword.get(opts, :timeout, @default_timeout)
     )
   end

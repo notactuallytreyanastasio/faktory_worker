@@ -22,16 +22,11 @@ defmodule FaktoryWorker.ConnectionManager.Server do
 
   # watch for and catch exits from command that may timeout
   def send_command(connection_manager, {command_type, _} = command, timeout)
-      when command_type in [:fetch, :push] do
-    try do
-      # IO.puts("---- #{inspect connection_manager} #{command_type} -- #{inspect self()}")
-      r = GenServer.call(connection_manager, {:send_command, command}, timeout)
+    when command_type in [:fetch, :push] do
+    # IO.puts("---- #{inspect connection_manager} #{command_type} -- #{inspect self()}")
+    r = GenServer.call(connection_manager, {:send_command, command}, timeout)
 #      IO.puts("---- response -- #{inspect r}")
-      r
-    catch
-      :exit, {:timeout, _} ->
-        {:error, :timeout}
-    end
+    r
   end
 
   def send_command(connection_manager, command, timeout) do
