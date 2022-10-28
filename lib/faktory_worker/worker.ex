@@ -66,7 +66,7 @@ defmodule FaktoryWorker.Worker do
   @spec send_fetch(state :: __MODULE__.t()) :: state :: __MODULE__.t()
   def send_fetch(%{worker_state: worker_state} = state) when worker_state == :ok do
     job_supervisor = job_supervisor_name(state)
-
+    # IO.puts("----in send fetch with state :ok -----")
     queues = checkout_queues(state)
 
     fetch_ref =
@@ -95,6 +95,7 @@ defmodule FaktoryWorker.Worker do
 
   @spec ack_job(state :: __MODULE__.t(), :ok | {:error, any()}) :: __MODULE__.t()
   def ack_job(state, :ok) do
+    IO.puts("----- JOB ACKED WITH STATE :ok ------")
     checkin_queues(state)
 
     state.conn_pid
@@ -103,6 +104,7 @@ defmodule FaktoryWorker.Worker do
   end
 
   def ack_job(state, {:error, reason}) do
+    IO.puts("----- JOB ACKED WITH STATE :error ------")
     checkin_queues(state)
 
     backtrace_length = Map.get(state.job, "backtrace", 30)
@@ -122,6 +124,7 @@ defmodule FaktoryWorker.Worker do
   end
 
   def handle_fetch_response({:ok, job}, state) when is_map(job) do
+    # IO.puts("----- HANDLING FETCH RESPONSE FOR :ok, #{inspect(job)} ------")
     job_supervisor = job_supervisor_name(state)
 
     job_module =
@@ -148,6 +151,7 @@ defmodule FaktoryWorker.Worker do
   def handle_fetch_response({:ok, _}, state), do: schedule_fetch(state)
 
   def handle_fetch_response({:error, reason}, state) do
+    # IO.puts("----- HANDLING FETCH RESPONSE FOR :error #{inspect(reason)} ------")
     Telemetry.execute(:fetch, {:error, reason}, %{wid: state.process_wid})
     Process.send_after(self(), :fetch, state.retry_interval)
     state

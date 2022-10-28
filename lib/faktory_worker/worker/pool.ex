@@ -15,7 +15,7 @@ defmodule FaktoryWorker.Worker.Pool do
 
     children = Enum.map(1..size, fn i -> map_connection(i, opts) end)
 
-    Supervisor.init([], strategy: :one_for_one)
+    Supervisor.init(children, strategy: :one_for_one)
   end
 
   defp map_connection(number, opts) do
@@ -33,6 +33,10 @@ defmodule FaktoryWorker.Worker.Pool do
     ]
 
     FaktoryWorker.Worker.Server.child_spec(opts)
+  end
+
+  def handle_info({:EXIT, pid, {:timeout, {:gen_server, :call, [name, {:checkout, ref, _}, timeout]}}}) do
+    require IEx; IEx.pry
   end
 
   def format_worker_pool_name(opts) do

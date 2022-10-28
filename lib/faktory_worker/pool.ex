@@ -18,6 +18,10 @@ defmodule FaktoryWorker.Pool do
     )
   end
 
+  def handle_info({:EXIT, pid, {:timeout, {:gen_server, :call, [name, {:checkout, ref, _}, timeout]}}}) do
+    require IEx; IEx.pry
+  end
+
   @spec format_pool_name(name :: atom()) :: atom()
   def format_pool_name(name) when is_atom(name) do
     :"#{name}_pool"

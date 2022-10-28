@@ -24,7 +24,7 @@ defmodule FaktoryWorker.ConnectionManager.Server do
   def send_command(connection_manager, {command_type, _} = command, timeout)
       when command_type in [:fetch, :push] do
     try do
-      IO.puts("---- #{inspect connection_manager} #{command_type} -- #{inspect self()}")
+      # IO.puts("---- #{inspect connection_manager} #{command_type} -- #{inspect self()}")
       r = GenServer.call(connection_manager, {:send_command, command}, timeout)
 #      IO.puts("---- response -- #{inspect r}")
       r
@@ -45,7 +45,7 @@ defmodule FaktoryWorker.ConnectionManager.Server do
 
   @impl true
   def handle_call({:send_command, command}, _, state) do
-    IO.puts("---- SERVER -- #{inspect self()}")
+    # IO.puts("---- SERVER -- #{inspect self()}")
     {result, state} = ConnectionManager.send_command(state, command)
     {:reply, result, state}
   end
